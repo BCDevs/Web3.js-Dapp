@@ -1,20 +1,20 @@
 function addCredentials() {
-  let userCredentials = `Account Address: <input type="text" id="userAddress" placeholder="Type Your Account Address..."/> <br/><br/>
-      Private Key: <input type="text" id="userKey" placeholder="Type Your Private Key.."/> <br/><br/>
+  let userCredentials = `Private Key: <input type="text" id="userKey" placeholder="Type Your Private Key.."/> <br/><br/>
       <button id="submit" class="align-center" onclick="ready()">Submit</button>`
       document.querySelector("#profile-content").innerHTML =userCredentials;
     }
-let nodeProvider= prompt("Please Enter Your Infura URL. We Never Store Your API keys and Valid for This Session Only.", "https://ropsten.infura.io/v3/");
+let nodeProvider= "https://testnet-rpc.gochain.io/";
     addCredentials();
     function ready(){
-let account= document.getElementById("userAddress").value;
-let key= document.getElementById("userKey").value;
-let privateKey1 = new ethereumjs.Buffer.Buffer(key, 'hex');
-//console.log(key)
 const provider = new Web3.providers.HttpProvider(nodeProvider); 
 const web3 = new Web3(provider);
 console.log(web3.version);
-const contract_Address = "0x88fc0739e42b7b3ff835d4cb654ae0740f3752b0";
+let key= document.getElementById("userKey").value;
+let hexKey="0x"+key;
+let acc= web3.eth.accounts.privateKeyToAccount(hexKey);
+let account= acc.address;
+let privateKey1 = new ethereumjs.Buffer.Buffer(key, 'hex');
+const contract_Address = "0xb634b87937c985cbc036acf09b240ce3e57fab54";
 const abi =[{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"createAccount","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"_content","type":"string"}],"name":"writeMessage","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_index","type":"uint256"}],"name":"getMessage","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"address"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"messagesLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"userDetails","outputs":[{"name":"","type":"string"},{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}];
 web3.eth.defaultAccount =account;
 const contract = new web3.eth.Contract(abi, contract_Address);
